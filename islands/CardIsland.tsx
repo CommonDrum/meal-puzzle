@@ -27,11 +27,11 @@ export default function CardIsland() {
       title: "Dock 4", 
       capacity: 5,
       cards: [
-        { id: "card1", text: "Card 1", backgroundUrl: "/placeholder.png" },
-        { id: "card2", text: "Card 2", backgroundUrl: "/placeholder.png" },
-        { id: "card3", text: "Card 3", backgroundUrl: "/placeholder.png" },
-        { id: "card4", text: "Card 4", backgroundUrl: "/placeholder.png" },
-        { id: "card5", text: "Card 5", backgroundUrl: "/placeholder.png" },
+        { id: "card1", text: "Card 1", backgroundUrl: "/logo.svg" },
+        { id: "card2", text: "Card 2", backgroundUrl: "/logo.svg" },
+        { id: "card3", text: "Card 3", backgroundUrl: "/logo.svg" },
+        { id: "card4", text: "Card 4", backgroundUrl: "/logo.svg" },
+        { id: "card5", text: "Card 5", backgroundUrl: "/logo.svg" },
       ]
     },
   ]);
