@@ -57,31 +57,24 @@ export default function CardIsland() {
   };
 
   const moveCard = (cardId: string, fromDockId: string, toDockId: string): boolean => {
-    const fromDock = docks.value.find(d => d.id === fromDockId);
-    const toDock = docks.value.find(d => d.id === toDockId);
+    // Create a deep copy of the current docks state
+    const currentDocks = JSON.parse(JSON.stringify(docks.value));
+    
+    const fromDock = currentDocks.find((d: DockData) => d.id === fromDockId);
+    const toDock = currentDocks.find((d: DockData) => d.id === toDockId);
     
     if (!fromDock || !toDock) return false;
     if (toDock.cards.length >= toDock.capacity) return false;
     
-    const cardToMove = fromDock.cards.find(c => c.id === cardId);
-    if (!cardToMove) return false;
-
-    docks.value = docks.value.map(dock => {
-      if (dock.id === fromDockId) {
-        return {
-          ...dock,
-          cards: dock.cards.filter(c => c.id !== cardId)
-        };
-      }
-      if (dock.id === toDockId) {
-        return {
-          ...dock,
-          cards: [...dock.cards, cardToMove]
-        };
-      }
-      return dock;
-    });
-
+    const cardIndex = fromDock.cards.findIndex((c: CardData) => c.id === cardId);
+    if (cardIndex === -1) return false;
+    
+    // Remove card from source dock and add to target dock
+    const cardToMove = fromDock.cards.splice(cardIndex, 1)[0];
+    toDock.cards.push(cardToMove);
+    
+    // Update the signal with the new state
+    docks.value = currentDocks;
     return true;
   };
 
@@ -97,12 +90,23 @@ export default function CardIsland() {
     
     if (!sourceDock) return;
 
+    // Prevent dropping if target dock is full
+    const targetDock = docks.value.find(dock => dock.id === targetDockId);
+    if (!targetDock || targetDock.cards.length >= targetDock.capacity) {
+      handleDragEnd();
+      return;
+    }
+
     // Try to move the card
-    moveCard(draggedCardId.value, sourceDock.id, targetDockId);
+    const success = moveCard(draggedCardId.value, sourceDock.id, targetDockId);
     
-    // Reset drag state
-    draggedCardId.value = null;
-    draggedOverDockId.value = null;
+    // Reset drag state regardless of move success
+    handleDragEnd();
+
+    // Force a re-render if the move was successful
+    if (success) {
+      docks.value = [...docks.value];
+    }
   };
 
   // Global handlers
@@ -110,8 +114,7 @@ export default function CardIsland() {
     window.addEventListener('dragover', (e) => e.preventDefault());
     window.addEventListener('drop', (e) => {
       e.preventDefault();
-      draggedCardId.value = null;
-      draggedOverDockId.value = null;
+      handleDragEnd();
     });
   }
 

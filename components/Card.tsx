@@ -4,9 +4,10 @@ export interface CardProps {
   backgroundUrl: string;
   text: string;
   onDragStart: (e: DragEvent, cardId: string) => void;
+  isDragging?: boolean;
 }
 
-export function Card({ id, backgroundUrl, text, onDragStart }: CardProps) {
+export function Card({ id, backgroundUrl, text, onDragStart, isDragging }: CardProps) {
   const handleDragStart = (e: DragEvent) => {
     e.dataTransfer.effectAllowed = 'move';
     onDragStart(e, id);
@@ -14,11 +15,12 @@ export function Card({ id, backgroundUrl, text, onDragStart }: CardProps) {
 
   return (
     <div
-      class="relative w-32 h-48 rounded-xl shadow-lg cursor-move 
+      class={`relative w-32 h-48 rounded-xl shadow-lg cursor-move 
         transform transition-all duration-200 ease-out
         hover:scale-105 hover:shadow-2xl hover:z-10
         active:scale-95 active:shadow-md
-        group"
+        ${isDragging ? 'opacity-50' : 'opacity-100'}
+        group`}
       draggable="true"
       data-card-id={id}
       onDragStart={handleDragStart}

@@ -7,6 +7,8 @@ export interface DockProps {
   title: string;
   capacity: number;
   onDragOver: (e: DragEvent) => void;
+  onDragEnter: (e: DragEvent) => void;
+  onDragLeave: (e: DragEvent) => void;
   onDrop: (e: DragEvent, dockId: string) => void;
   isDraggedOver?: boolean;
 }
@@ -15,7 +17,9 @@ export function Dock({
   id, 
   children, 
   title, 
-  onDragOver, 
+  onDragOver,
+  onDragEnter,
+  onDragLeave,
   onDrop, 
   isDraggedOver 
 }: DockProps) {
@@ -29,6 +33,8 @@ export function Dock({
         backdrop-blur-sm`}
       data-dock-id={id}
       onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
       onDrop={(e) => onDrop(e, id)}
     >
       <h3 class="text-lg font-semibold mb-6 text-gray-700 
