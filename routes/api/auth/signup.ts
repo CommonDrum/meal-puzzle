@@ -1,6 +1,6 @@
 // routes/auth/signup.ts
 import { Handlers } from "$fresh/server.ts";
-import { supabase } from "../../utils/supabase.ts";
+import { supabase } from "../../../utils/supabase.ts";
 
 export const handler: Handlers = {
   async POST(req) {
