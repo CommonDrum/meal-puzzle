@@ -1,28 +1,16 @@
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { getCookies } from "$std/http/cookie.ts";
-import { createServerSupabaseClient } from "../utils/supabase.ts";
+// routes/_middleware.ts
+import { FreshContext } from "$fresh/server.ts";
+import { supabase } from "../utils/supabase.ts";
 
-export async function handler(
-  req: Request,
-  ctx: MiddlewareHandlerContext
-) {
-  const cookies = getCookies(req.headers);
-  const supabase = createServerSupabaseClient(cookies);
-  
-  const { data: { session } } = await supabase.auth.getSession();
+export async function handler(req: Request, ctx: FreshContext) {
+  // Get token from cookie
+  const token = req.headers.get('cookie')?.split(';')
+    .find(c => c.trim().startsWith('sb-token='))
+    ?.split('=')[1];
 
-  ctx.state.session = session;
-  ctx.state.supabase = supabase;
-
-  // Check protected routes
-  const isProtectedRoute = req.url.includes('/dashboard');
-  
-  if (isProtectedRoute && !session) {
-    const redirect = new URL(req.url).pathname;
-    return new Response(null, {
-      status: 302,
-      headers: { Location: `/signin?redirect=${redirect}` }
-    });
+  if (token) {
+    const { data: { user } } = await supabase.auth.getUser(token);
+    ctx.state.user = user;
   }
 
   return await ctx.next();

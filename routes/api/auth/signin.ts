@@ -1,33 +1,31 @@
-// routes/api/auth/login.ts
+// routes/api/auth/signin.ts
 import { Handlers } from "$fresh/server.ts";
+import { supabase } from "../../../utils/supabase.ts";
 
 export const handler: Handlers = {
-  async POST(req, ctx) {
+  async POST(req) {
     const form = await req.formData();
     const email = form.get("email")?.toString();
     const password = form.get("password")?.toString();
 
-    if (!email || !password) {
-      return new Response("Email and password required", { status: 400 });
-    }
-
-    const supabase = ctx.state.supabase;
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password
     });
 
     if (error) {
-      return new Response(error.message, { status: 400 });
+      return new Response(null, {
+        status: 303,
+        headers: { Location: `/signin?error=${error.message}` }
+      });
     }
 
-    // Redirect to dashboard on success
     return new Response(null, {
       status: 303,
       headers: {
-        Location: "/dashboard",
-      },
+        "Set-Cookie": `sb-token=${data.session?.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+        "Location": "/"
+      }
     });
-  },
+  }
 };
-
