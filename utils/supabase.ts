@@ -1,14 +1,7 @@
-// utils/supabase.ts
-import "jsr:@std/dotenv/load";
-import { createClient } from "@supabase/supabase-js";
+// supabase.ts
+import { createClient } from '@supabase/supabase-js'
 
-export const supabase = createClient(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_ANON_KEY")!,
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false
-    }
-  }
-);
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!
+
+export const supabase = createClient(supabaseUrl, supabaseKey)

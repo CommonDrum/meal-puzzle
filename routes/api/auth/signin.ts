@@ -1,31 +1,39 @@
-// routes/api/auth/signin.ts
+// routes/auth/signin.ts
 import { Handlers } from "$fresh/server.ts";
 import { supabase } from "../../../utils/supabase.ts";
 
 export const handler: Handlers = {
   async POST(req) {
-    const form = await req.formData();
-    const email = form.get("email")?.toString();
-    const password = form.get("password")?.toString();
+    try {
+      const form = await req.formData();
+      const email = form.get("email")?.toString();
+      const password = form.get("password")?.toString();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      return new Response(null, {
-        status: 303,
-        headers: { Location: `/signin?error=${error.message}` }
-      });
-    }
-
-    return new Response(null, {
-      status: 303,
-      headers: {
-        "Set-Cookie": `sb-token=${data.session?.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-        "Location": "/"
+      if (!email || !password) {
+        return new Response("Email and password required", { status: 400 });
       }
-    });
-  }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Create response with auth cookie
+      const response = new Response(JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // Set auth cookie
+      if (data.session) {
+        const cookieStr = `sb-access-token=${data.session.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax`;
+        response.headers.set("Set-Cookie", cookieStr);
+      }
+
+      return response;
+    } catch (error) {
+      return new Response(error.message, { status: 400 });
+    }
+  },
 };
