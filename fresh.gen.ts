@@ -10,6 +10,7 @@ import * as $dashboard from "./routes/dashboard.ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $signin from "./routes/signin.tsx";
+import * as $utils_supabase from "./routes/utils/supabase.ts";
 import * as $CardIsland from "./islands/CardIsland.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
 import * as $NavbarIsland from "./islands/NavbarIsland.tsx";
@@ -25,6 +26,7 @@ const manifest = {
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
     "./routes/signin.tsx": $signin,
+    "./routes/utils/supabase.ts": $utils_supabase,
   },
   islands: {
     "./islands/CardIsland.tsx": $CardIsland,
