@@ -1,20 +1,22 @@
-// islands/LoginForm.tsx
+// islands/SignUpForm.tsx
 import { useSignal } from "@preact/signals";
 import { FormHeader } from "../components/FormHeader.tsx";
 import { ErrorAlert } from "../components/ErrorAlert.tsx";
 import { FormField } from "../components/FormField.tsx";
-import { RememberMe } from "../components/login/RememberMe.tsx";
+import { TermsCheckbox } from "../components/signup/TermsCheckbox.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 
-interface LoginData {
+interface SignUpData {
   email: string;
   password: string;
+  fullName: string;
 }
 
-export default function LoginForm() {
-  const formData = useSignal<LoginData>({
+export default function SignUpForm() {
+  const formData = useSignal<SignUpData>({
     email: "",
     password: "",
+    fullName: "",
   });
   const isLoading = useSignal(false);
   const error = useSignal("");
@@ -25,7 +27,7 @@ export default function LoginForm() {
     error.value = "";
 
     try {
-      const response = await fetch("/api/auth/signin", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,13 +35,14 @@ export default function LoginForm() {
         body: JSON.stringify({
           email: formData.value.email,
           password: formData.value.password,
+          full_name: formData.value.fullName,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to sign in");
+        throw new Error(data.error || "Failed to sign up");
       }
 
       window.location.href = "/";
@@ -66,6 +69,16 @@ export default function LoginForm() {
         
         <form onSubmit={handleSubmit} class="mt-8 space-y-6">
           <FormField
+            id="fullName"
+            name="fullName"
+            type="text"
+            label="Full Name"
+            value={formData.value.fullName}
+            onChange={handleChange}
+            placeholder="John Doe"
+          />
+
+          <FormField
             id="email"
             name="email"
             type="email"
@@ -83,9 +96,10 @@ export default function LoginForm() {
             value={formData.value.password}
             onChange={handleChange}
             placeholder="••••••••"
+            hint="Must be at least 8 characters long"
           />
 
-          <RememberMe />
+          <TermsCheckbox />
           <SubmitButton isLoading={isLoading.value} />
         </form>
       </div>
