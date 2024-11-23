@@ -4,7 +4,11 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
-import * as $api_joke from "./routes/api/joke.ts";
+import * as $_middleware from "./routes/_middleware.tsx";
+import * as $api_auth_signin from "./routes/api/auth/signin.ts";
+import * as $api_auth_signup from "./routes/api/auth/signup.ts";
+import * as $auth_signin from "./routes/auth/signin.tsx";
+import * as $auth_signup from "./routes/auth/signup.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $CardIsland from "./islands/CardIsland.tsx";
@@ -14,7 +18,11 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
-    "./routes/api/joke.ts": $api_joke,
+    "./routes/_middleware.tsx": $_middleware,
+    "./routes/api/auth/signin.ts": $api_auth_signin,
+    "./routes/api/auth/signup.ts": $api_auth_signup,
+    "./routes/auth/signin.tsx": $auth_signin,
+    "./routes/auth/signup.tsx": $auth_signup,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
   },
