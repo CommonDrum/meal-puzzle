@@ -1,18 +1,16 @@
 // components/Navbar.tsx
-import { asset } from "$fresh/runtime.ts";
 import { JSX } from "preact";
-import { useState } from "preact/hooks";
+import { IS_BROWSER } from "$fresh/runtime.ts";
+import { User } from "@supabase/supabase-js";
 
 interface NavbarProps {
-  active?: string;
+  user?: User | null;
 }
 
-export default function Navbar({ active }: NavbarProps): JSX.Element {
+export default function Navbar({ user }: NavbarProps): JSX.Element {
   const links = [
     { href: "/", text: "Home" },
     { href: "/about", text: "About" },
-    { href: "/projects", text: "Projects" },
-    { href: "/contact", text: "Contact" },
   ];
 
   return (
@@ -24,55 +22,58 @@ export default function Navbar({ active }: NavbarProps): JSX.Element {
             href="/" 
             class="flex items-center gap-3 text-gray-900 hover:text-gray-600 transition-colors"
           >
-            <img
-              src={asset("/logo.svg")}
-              alt="Logo"
-              class="w-8 h-8"
-            />
-            <span class="font-semibold text-lg tracking-tight">Your Brand</span>
+            <span class="font-semibold text-lg tracking-tight">PuzzleMeal</span>
           </a>
 
           {/* Desktop Navigation */}
-          <div class="hidden md:block">
-            <ul class="flex items-center gap-8">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    class={`relative py-2 text-sm font-medium transition-colors
-                      ${
-                        active === link.href
-                          ? "text-gray-900"
-                          : "text-gray-600 hover:text-gray-900"
-                      }
-                      ${
-                        active === link.href
-                          ? "after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-gray-900 after:rounded-full"
-                          : ""
-                      }
-                    `}
-                  >
-                    {link.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div class="hidden md:flex items-center gap-8">
+            {/* Main navigation links */}
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                {link.text}
+              </a>
+            ))}
 
-          {/* Action Buttons */}
-          <div class="hidden md:flex items-center gap-4">
-            <a 
-              href="/login" 
-              class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Sign in
-            </a>
-            <a 
-              href="/signup" 
-              class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-700 transition-colors"
-            >
-              Get started
-            </a>
+            {/* Auth section */}
+            <div class="flex items-center gap-4">
+              {user ? (
+                <>
+                  <a 
+                    href="/dashboard" 
+                    class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Dashboard
+                  </a>
+                  <form method="POST" action="/api/auth/signout">
+                    <button 
+                      class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors"
+                      disabled={!IS_BROWSER}
+                    >
+                      Sign Out
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <a 
+                    href="/signin" 
+                    class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Sign In
+                  </a>
+                  <a 
+                    href="/signup"
+                    class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-full hover:bg-gray-700 transition-colors"
+                  >
+                    Get Started
+                  </a>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -98,37 +99,53 @@ export default function Navbar({ active }: NavbarProps): JSX.Element {
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu Panel */}
-      <div class="hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              class={`block px-3 py-2 rounded-lg text-base font-medium transition-colors ${
-                active === link.href
-                  ? "text-gray-900 bg-gray-100"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              {link.text}
-            </a>
-          ))}
-          <div class="pt-4 space-y-2">
-            <a
-              href="/login"
-              class="block w-full px-3 py-2 text-center text-gray-600 hover:text-gray-900 rounded-lg transition-colors"
-            >
-              Sign in
-            </a>
-            <a
-              href="/signup"
-              class="block w-full px-3 py-2 text-center text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Get started
-            </a>
+        {/* Mobile Menu Panel - You might want to make this an island for interactivity */}
+        <div class="hidden md:hidden">
+          <div class="px-2 pt-2 pb-3 space-y-1">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+              >
+                {link.text}
+              </a>
+            ))}
+            
+            {user ? (
+              <>
+                <a 
+                  href="/dashboard"
+                  class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  Dashboard
+                </a>
+                <form method="POST" action="/api/auth/signout">
+                  <button 
+                    class="w-full mt-4 px-3 py-2 text-left text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                    disabled={!IS_BROWSER}
+                  >
+                    Sign Out
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <a 
+                  href="/signin"
+                  class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  Sign In
+                </a>
+                <a 
+                  href="/signup"
+                  class="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 hover:bg-gray-700 transition-colors"
+                >
+                  Get Started
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,16 +1,23 @@
-// utils/supabase.ts
-import { createClient } from "@supabase/supabase-js";
 import "jsr:@std/dotenv/load";
+import { createClient } from "@supabase/supabase-js";
 
+// Debug log to check environment variables
+console.log("Supabase Config:", {
+  url: Deno.env.get("SUPABASE_URL"),
+  keyExists: !!Deno.env.get("SUPABASE_ANON_KEY")
+});
 
-// Initialize Supabase client
 export const createServerSupabaseClient = (cookies: Record<string, string>) => {
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
 
-  console.log(Deno.env.get("SUPABASE_URL"));
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      "Environment variables not found. Make sure to set SUPABASE_URL and SUPABASE_ANON_KEY"
+    );
+  }
 
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: false,
       detectSessionInUrl: false,
@@ -25,70 +32,3 @@ export const createServerSupabaseClient = (cookies: Record<string, string>) => {
     },
   });
 };
-
-
-// Simplified database types
-export type Database = {
-  public: {
-    Tables: {
-      profiles: {
-        Row: {
-          id: string;
-          email: string;
-          name: string;
-          created_at: string;
-        };
-        Insert: {
-          id: string;
-          email: string;
-          name: string;
-        };
-        Update: {
-          email?: string;
-          name?: string;
-        };
-      };
-    };
-  };
-};
-
-// SQL for initial Supabase setup:
-/*
--- Create a profiles table
-create table public.profiles (
-    id uuid references auth.users on delete cascade primary key,
-    email text unique not null,
-    name text not null,
-    created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Set up Row Level Security (RLS)
-alter table public.profiles enable row level security;
-
--- Create policies
-create policy "Users can view their own profile" 
-on public.profiles for select 
-using (auth.uid() = id);
-
-create policy "Users can update their own profile" 
-on public.profiles for update 
-using (auth.uid() = id);
-
--- Create a trigger to create profile after signup
-create function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, email, name)
-  values (
-    new.id,
-    new.email,
-    coalesce(new.raw_user_meta_data->>'name', new.email)
-  );
-  return new;
-end;
-$$ language plpgsql security definer;
-
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
-*/
