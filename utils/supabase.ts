@@ -1,12 +1,14 @@
 // utils/supabase.ts
 import { createClient } from "@supabase/supabase-js";
+import "jsr:@std/dotenv/load";
+
 
 // Initialize Supabase client
 export const createServerSupabaseClient = (cookies: Record<string, string>) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
 
-  console.log("Supabase URL:", supabaseUrl);
+  console.log(Deno.env.get("SUPABASE_URL"));
 
   return createClient(supabaseUrl, supabaseKey, {
     auth: {
