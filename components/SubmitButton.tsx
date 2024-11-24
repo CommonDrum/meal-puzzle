@@ -1,9 +1,10 @@
 // components/signup/SubmitButton.tsx
 interface SubmitButtonProps {
   isLoading: boolean;
+  caption: string;
 }
 
-export function SubmitButton({ isLoading }: SubmitButtonProps) {
+export function SubmitButton({ isLoading, caption }: SubmitButtonProps) {
   return (
     <button
       type="submit"
@@ -28,7 +29,7 @@ export function SubmitButton({ isLoading }: SubmitButtonProps) {
           Creating account...
         </div>
       ) : (
-        "Create account"
+        caption
       )}
     </button>
   );

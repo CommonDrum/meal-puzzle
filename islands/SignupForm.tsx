@@ -64,18 +64,23 @@ export default function SignUpForm() {
   return (
     <div class="min-h-screen bg-white/80 backdrop-blur-sm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
-        <FormHeader />
+        <FormHeader 
+        caption="Welcome to Meal Puzzle"
+        subCaption="New here?"
+        linkText="Create an account"
+        linkHref="/signup"
+      />
         <ErrorAlert message={error.value} />
         
         <form onSubmit={handleSubmit} class="mt-8 space-y-6">
           <FormField
-            id="fullName"
-            name="fullName"
+            id="name"
+            name="name"
             type="text"
-            label="Full Name"
+            label="Name"
             value={formData.value.fullName}
             onChange={handleChange}
-            placeholder="John Doe"
+            placeholder="John"
           />
 
           <FormField
@@ -100,7 +105,7 @@ export default function SignUpForm() {
           />
 
           <TermsCheckbox />
-          <SubmitButton isLoading={isLoading.value} />
+          <SubmitButton isLoading={isLoading.value} caption="Sign Up" />
         </form>
       </div>
     </div>

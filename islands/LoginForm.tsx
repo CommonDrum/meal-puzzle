@@ -25,24 +25,29 @@ export default function LoginForm() {
     error.value = "";
 
     try {
+      // Create FormData object
+      const form = new FormData();
+      form.append("email", formData.value.email.trim());
+      form.append("password", formData.value.password);
+
       const response = await fetch("/api/auth/signin", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.value.email,
-          password: formData.value.password,
-        }),
+        body: form, // Send as FormData instead of JSON
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to sign in");
+        const errorText = await response.text();
+        throw new Error(errorText || "Failed to sign in");
       }
 
-      window.location.href = "/";
+      const data = await response.json();
+      
+      // Successful login
+      if (data.session) {
+        window.location.href = "/";
+      } else {
+        throw new Error("No session data received");
+      }
     } catch (err) {
       error.value = err.message;
     } finally {
@@ -61,7 +66,13 @@ export default function LoginForm() {
   return (
     <div class="min-h-screen bg-white/80 backdrop-blur-sm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
-        <FormHeader />
+        <FormHeader
+          caption="Welcome to Meal Puzzle"
+          subCaption="New here?"
+          linkText="Sign up"
+          linkHref="/signup"
+        />
+        
         <ErrorAlert message={error.value} />
         
         <form onSubmit={handleSubmit} class="mt-8 space-y-6">
@@ -86,7 +97,7 @@ export default function LoginForm() {
           />
 
           <RememberMe />
-          <SubmitButton isLoading={isLoading.value} />
+          <SubmitButton isLoading={isLoading.value} caption="Sign In" />
         </form>
       </div>
     </div>

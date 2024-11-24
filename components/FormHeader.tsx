@@ -1,12 +1,19 @@
 // components/signup/FormHeader.tsx
-export function FormHeader() {
+interface FormHeaderProps {
+  caption: string;
+  subCaption: string;
+  linkText: string;
+  linkHref: string;
+}
+
+export function FormHeader({ caption, subCaption, linkText, linkHref }: FormHeaderProps) {
   return (
     <div class="text-center">
-      <h2 class="text-3xl font-bold text-gray-900">Create your account</h2>
+      <h2 class="text-3xl font-bold text-gray-900">{caption}</h2>
       <p class="mt-2 text-sm text-gray-600">
-        Already have an account?{" "}
-        <a href="/signin" class="font-medium text-gray-900 hover:text-gray-700">
-          Sign in
+        {subCaption}{" "}
+        <a href={linkHref} class="font-medium text-gray-900 hover:text-gray-700">
+          {linkText}
         </a>
       </p>
     </div>
