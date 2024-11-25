@@ -5,9 +5,14 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $about from "./routes/about.tsx";
+import * as $account_preferences from "./routes/account/preferences.tsx";
+import * as $account_recipes from "./routes/account/recipes.tsx";
+import * as $account_settings from "./routes/account/settings.tsx";
 import * as $api_auth_signin from "./routes/api/auth/signin.ts";
 import * as $api_auth_signout from "./routes/api/auth/signout.ts";
 import * as $api_auth_signup from "./routes/api/auth/signup.ts";
+import * as $api_preferences from "./routes/api/preferences.ts";
 import * as $dashboard from "./routes/dashboard.ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
@@ -24,9 +29,14 @@ const manifest = {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/about.tsx": $about,
+    "./routes/account/preferences.tsx": $account_preferences,
+    "./routes/account/recipes.tsx": $account_recipes,
+    "./routes/account/settings.tsx": $account_settings,
     "./routes/api/auth/signin.ts": $api_auth_signin,
     "./routes/api/auth/signout.ts": $api_auth_signout,
     "./routes/api/auth/signup.ts": $api_auth_signup,
+    "./routes/api/preferences.ts": $api_preferences,
     "./routes/dashboard.ts": $dashboard,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
