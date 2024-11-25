@@ -1,24 +1,34 @@
 // components/signup/TermsCheckbox.tsx
-export function TermsCheckbox() {
+interface TermsCheckboxProps {
+  checked: boolean;
+  onChange: (e: Event) => void;
+  error?: string;
+}
+
+export function TermsCheckbox({ checked, onChange, error }: TermsCheckboxProps) {
   return (
-    <div class="flex items-start">
-      <input
-        id="terms"
-        name="terms"
-        type="checkbox"
-        required
-        class="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded"
-      />
-      <label htmlFor="terms" class="ml-2 block text-sm text-gray-600">
-        I agree to the{" "}
-        <a href="/terms" class="font-medium text-gray-900 hover:text-gray-700">
-          Terms of Service
-        </a>{" "}
-        and{" "}
-        <a href="/privacy" class="font-medium text-gray-900 hover:text-gray-700">
-          Privacy Policy
-        </a>
-      </label>
+    <div class="space-y-2">
+      <div class="flex items-center">
+        <input
+          id="terms"
+          name="terms"
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+        />
+        <label for="terms" class="ml-2 block text-sm text-gray-900">
+          I accept the{" "}
+          <a href="/terms" class="text-indigo-600 hover:text-indigo-500">
+            Terms and Conditions
+          </a>
+        </label>
+      </div>
+      {error && (
+        <p class="text-sm text-red-600" id="terms-error">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

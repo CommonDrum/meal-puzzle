@@ -13,7 +13,8 @@ import * as $api_auth_signin from "./routes/api/auth/signin.ts";
 import * as $api_auth_signout from "./routes/api/auth/signout.ts";
 import * as $api_auth_signup from "./routes/api/auth/signup.ts";
 import * as $api_preferences from "./routes/api/preferences.ts";
-import * as $dashboard from "./routes/dashboard.ts";
+import * as $dashboard from "./routes/dashboard.tsx";
+import * as $explore from "./routes/explore.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $signin from "./routes/signin.tsx";
@@ -21,7 +22,7 @@ import * as $signup from "./routes/signup.tsx";
 import * as $CardIsland from "./islands/CardIsland.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
 import * as $NavbarIsland from "./islands/NavbarIsland.tsx";
-import * as $SignupForm from "./islands/SignupForm.tsx";
+import * as $SignUpForm from "./islands/SignUpForm.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -37,7 +38,8 @@ const manifest = {
     "./routes/api/auth/signout.ts": $api_auth_signout,
     "./routes/api/auth/signup.ts": $api_auth_signup,
     "./routes/api/preferences.ts": $api_preferences,
-    "./routes/dashboard.ts": $dashboard,
+    "./routes/dashboard.tsx": $dashboard,
+    "./routes/explore.tsx": $explore,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
     "./routes/signin.tsx": $signin,
@@ -47,7 +49,7 @@ const manifest = {
     "./islands/CardIsland.tsx": $CardIsland,
     "./islands/LoginForm.tsx": $LoginForm,
     "./islands/NavbarIsland.tsx": $NavbarIsland,
-    "./islands/SignupForm.tsx": $SignupForm,
+    "./islands/SignUpForm.tsx": $SignUpForm,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

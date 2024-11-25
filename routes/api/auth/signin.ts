@@ -1,8 +1,9 @@
-// routes/auth/signin.ts
+// routes/api/auth/signin.ts
 import { Handlers } from "$fresh/server.ts";
-import { supabase } from "../../../utils/supabase.ts";
+import { createSupabaseClient } from "../../../utils/supabase.ts";
+import { AuthResponse } from "../../../types/auth.ts";
 
-export const handler: Handlers = {
+const handler: Handlers = {
   async POST(req) {
     try {
       const form = await req.formData();
@@ -10,30 +11,35 @@ export const handler: Handlers = {
       const password = form.get("password")?.toString();
 
       if (!email || !password) {
-        return new Response("Email and password required", { status: 400 });
+        return new Response("Email and password are required", { status: 400 });
       }
 
+      const supabase = createSupabaseClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
-
-      // Create response with auth cookie
-      const response = new Response(JSON.stringify(data), {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      // Set auth cookie
-      if (data.session) {
-        const cookieStr = `sb-access-token=${data.session.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax`;
-        response.headers.set("Set-Cookie", cookieStr);
+      if (error) {
+        return new Response(error.message, { status: 400 });
       }
 
-      return response;
+      // Set auth cookie
+      const headers = new Headers();
+      headers.set(
+        "Set-Cookie",
+        `auth-token=${data.session.access_token}; Path=/; HttpOnly; SameSite=Lax`
+      );
+
+      const response: AuthResponse = { session: data.session };
+      return new Response(JSON.stringify(response), {
+        status: 200,
+        headers,
+      });
     } catch (error) {
-      return new Response(error.message, { status: 400 });
+      return new Response(error.message, { status: 500 });
     }
   },
 };
+
+export { handler };

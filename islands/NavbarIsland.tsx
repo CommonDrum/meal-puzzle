@@ -1,5 +1,5 @@
 // islands/NavbarIsland.tsx
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { Logo } from "../components/navbar/Logo.tsx";
 import { Navigation } from "../components/navbar/Navigation.tsx";
 import { UserMenu } from "../components/navbar/UserMenu.tsx";
@@ -18,13 +18,30 @@ interface NavbarProps {
 export default function NavbarIsland({ user: initialUser, currentPath = "/" }: NavbarProps) {
   const [user, setUser] = useState(initialUser);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [path, setPath] = useState(currentPath);
+
+  // Update path when URL changes
+  useEffect(() => {
+    const updatePath = () => {
+      setPath(window.location.pathname);
+    };
+
+    // Update on initial load
+    updatePath();
+
+    // Listen for navigation events
+    window.addEventListener('popstate', updatePath);
+    
+    return () => {
+      window.removeEventListener('popstate', updatePath);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     try {
       const response = await fetch("/api/auth/signout", {
         method: "POST",
       });
-
       if (response.ok) {
         setUser(undefined);
         window.location.href = "/";
@@ -42,7 +59,10 @@ export default function NavbarIsland({ user: initialUser, currentPath = "/" }: N
       <div class="max-w-6xl mx-auto">
         <nav class="flex items-center justify-between h-16 px-4">
           <Logo />
-          <Navigation currentPath={currentPath} />
+          <Navigation 
+            currentPath={path} 
+            isAuthenticated={!!user} 
+          />
           
           {user ? (
             <UserMenu

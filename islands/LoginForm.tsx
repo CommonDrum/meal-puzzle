@@ -18,21 +18,36 @@ export default function LoginForm() {
   });
   const isLoading = useSignal(false);
   const error = useSignal("");
+  const rememberMe = useSignal(false);
+
+  const validateForm = (): boolean => {
+    if (!formData.value.email.trim()) {
+      error.value = "Email is required";
+      return false;
+    }
+    if (!formData.value.password) {
+      error.value = "Password is required";
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     isLoading.value = true;
     error.value = "";
 
     try {
-      // Create FormData object
       const form = new FormData();
       form.append("email", formData.value.email.trim());
       form.append("password", formData.value.password);
+      form.append("remember", rememberMe.value.toString());
 
       const response = await fetch("/api/auth/signin", {
         method: "POST",
-        body: form, // Send as FormData instead of JSON
+        body: form,
       });
 
       if (!response.ok) {
@@ -42,14 +57,18 @@ export default function LoginForm() {
 
       const data = await response.json();
       
+      // Check URL params for redirect
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get("redirect") || "/dashboard";
+
       // Successful login
       if (data.session) {
-        window.location.href = "/";
+        window.location.href = redirect;
       } else {
         throw new Error("No session data received");
       }
     } catch (err) {
-      error.value = err.message;
+      error.value = err instanceof Error ? err.message : "An error occurred";
     } finally {
       isLoading.value = false;
     }
@@ -61,6 +80,10 @@ export default function LoginForm() {
       ...formData.value,
       [name]: value,
     };
+    // Clear error when user starts typing
+    if (error.value) {
+      error.value = "";
+    }
   };
 
   return (
@@ -73,7 +96,7 @@ export default function LoginForm() {
           linkHref="/signup"
         />
         
-        <ErrorAlert message={error.value} />
+        {error.value && <ErrorAlert message={error.value} />}
         
         <form onSubmit={handleSubmit} class="mt-8 space-y-6">
           <FormField
@@ -84,6 +107,8 @@ export default function LoginForm() {
             value={formData.value.email}
             onChange={handleChange}
             placeholder="you@example.com"
+            required
+            autocomplete="email"
           />
 
           <FormField
@@ -94,10 +119,19 @@ export default function LoginForm() {
             value={formData.value.password}
             onChange={handleChange}
             placeholder="••••••••"
+            required
+            autocomplete="current-password"
           />
 
-          <RememberMe />
-          <SubmitButton isLoading={isLoading.value} caption="Sign In" />
+          <RememberMe 
+            checked={rememberMe.value} 
+            onChange={(e) => rememberMe.value = (e.target as HTMLInputElement).checked} 
+          />
+
+          <SubmitButton 
+            isLoading={isLoading.value} 
+            caption="Sign In" 
+          />
         </form>
       </div>
     </div>

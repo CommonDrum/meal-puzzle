@@ -1,10 +1,10 @@
-// supabase.ts
-import { createClient } from '@supabase/supabase-js'
-import "jsr:@std/dotenv/load";
+// utils/supabase.ts
+import { createClient } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL")
-const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
 
-
-
-export const supabase = createClient(supabaseUrl, supabaseKey)
+export const createSupabaseClient = () => {
+  return createClient(supabaseUrl, supabaseKey);
+};
