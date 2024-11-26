@@ -12,15 +12,18 @@ import * as $account_settings from "./routes/account/settings.tsx";
 import * as $api_auth_signin from "./routes/api/auth/signin.ts";
 import * as $api_auth_signout from "./routes/api/auth/signout.ts";
 import * as $api_auth_signup from "./routes/api/auth/signup.ts";
+import * as $api_preferences from "./routes/api/preferences.ts";
 import * as $dashboard from "./routes/dashboard.tsx";
 import * as $explore from "./routes/explore.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
+import * as $preference from "./routes/preference.tsx";
 import * as $signin from "./routes/signin.tsx";
 import * as $signup from "./routes/signup.tsx";
 import * as $CardIsland from "./islands/CardIsland.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
 import * as $NavbarIsland from "./islands/NavbarIsland.tsx";
+import * as $PreferencesIsland from "./islands/PreferencesIsland.tsx";
 import * as $SignUpForm from "./islands/SignUpForm.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
@@ -36,10 +39,12 @@ const manifest = {
     "./routes/api/auth/signin.ts": $api_auth_signin,
     "./routes/api/auth/signout.ts": $api_auth_signout,
     "./routes/api/auth/signup.ts": $api_auth_signup,
+    "./routes/api/preferences.ts": $api_preferences,
     "./routes/dashboard.tsx": $dashboard,
     "./routes/explore.tsx": $explore,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
+    "./routes/preference.tsx": $preference,
     "./routes/signin.tsx": $signin,
     "./routes/signup.tsx": $signup,
   },
@@ -47,6 +52,7 @@ const manifest = {
     "./islands/CardIsland.tsx": $CardIsland,
     "./islands/LoginForm.tsx": $LoginForm,
     "./islands/NavbarIsland.tsx": $NavbarIsland,
+    "./islands/PreferencesIsland.tsx": $PreferencesIsland,
     "./islands/SignUpForm.tsx": $SignUpForm,
   },
   baseUrl: import.meta.url,
