@@ -1,6 +1,6 @@
 // routes/api/auth/signup.ts
 import { Handlers } from "$fresh/server.ts";
-import { createSupabaseClient } from "../../../utils/supabase.ts";
+import { supabase } from "../../../utils/supabase.ts";
 import { AuthResponse } from "../../../types/auth.ts";
 
 const handler: Handlers = {
@@ -22,7 +22,6 @@ const handler: Handlers = {
         );
       }
 
-      const supabase = createSupabaseClient();
       const { data, error } = await supabase.auth.signUp({
         email,
         password,

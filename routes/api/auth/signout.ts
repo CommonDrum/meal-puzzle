@@ -1,11 +1,10 @@
 // routes/api/auth/signout.ts
 import { Handlers } from "$fresh/server.ts";
-import { createSupabaseClient } from "../../../utils/supabase.ts";
+import { supabase } from "../../../utils/supabase.ts";
 
 const handler: Handlers = {
   async POST(req) {
     try {
-      const supabase = createSupabaseClient();
       const { error } = await supabase.auth.signOut();
 
       if (error) {

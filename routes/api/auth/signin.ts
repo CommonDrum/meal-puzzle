@@ -1,6 +1,6 @@
 // routes/api/auth/signin.ts
 import { Handlers } from "$fresh/server.ts";
-import { createSupabaseClient } from "../../../utils/supabase.ts";
+import { supabase } from "../../../utils/supabase.ts";
 import { AuthResponse } from "../../../types/auth.ts";
 
 const handler: Handlers = {
@@ -14,7 +14,6 @@ const handler: Handlers = {
         return new Response("Email and password are required", { status: 400 });
       }
 
-      const supabase = createSupabaseClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,

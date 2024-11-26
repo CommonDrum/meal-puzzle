@@ -1,6 +1,6 @@
 // routes/api/preferences.ts
 import { Handlers } from "$fresh/server.ts";
-import { createSupabaseClient } from "../../utils/supabase.ts";
+import { supabase } from "../../utils/supabase.ts";
 
 interface UserPreferences {
   dietary_restrictions: string[];
@@ -34,12 +34,11 @@ export const handler: Handlers = {
         throw new Error("Not authenticated");
       }
 
-      const supabase = createSupabaseClient();
       const { data, error } = await supabase
         .from('user_preferences')
         .select('*')
         .eq('user_id', ctx.state.user.id)
-        .maybeSingle(); // Changed from .single() to .maybeSingle()
+        .single();
 
       console.log("GET query result:", { data, error });
 
@@ -72,7 +71,6 @@ export const handler: Handlers = {
       const preferences = await req.json();
       console.log("Received preferences:", preferences);
 
-      const supabase = createSupabaseClient();
 
       // Prepare preference data with user_id
       const preferenceData = {

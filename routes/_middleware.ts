@@ -1,6 +1,6 @@
 // routes/_middleware.ts
 import { FreshContext } from "$fresh/server.ts";
-import { createSupabaseClient } from "../utils/supabase.ts";
+import { supabase } from "../utils/supabase.ts";
 
 interface State {
   user?: {
@@ -24,7 +24,6 @@ export async function handler(
     const isHomePage = url.pathname === "/";
 
     if (authToken) {
-      const supabase = createSupabaseClient();
       const { data: { user }, error } = await supabase.auth.getUser(authToken);
 
       if (user && !error) {
@@ -54,7 +53,7 @@ export async function handler(
     const isAuthRoute = req.url.includes('/api/auth/');
     const isProtectedRoute = req.url.includes('/dashboard') || 
                            req.url.includes('/profile') ||
-                           req.url.includes('/preferences'); // Added preferences
+                           req.url.includes('/preferences'); 
 
     if (isProtectedRoute && !ctx.state.user) {
       return new Response(null, {
