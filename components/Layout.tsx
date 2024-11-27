@@ -1,7 +1,7 @@
 // components/Layout.tsx
 import { ComponentChildren } from "preact";
 import NavbarIsland from "../islands/NavbarIsland.tsx";
-import { Footer } from "./Footer.tsx";
+import { Footer } from "./footer/Footer.tsx";
 
 interface LayoutProps {
   user?: any;

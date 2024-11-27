@@ -1,6 +1,6 @@
 // components/Footer.tsx
-import { FooterLink } from "./footer/FooterLink.tsx";
-import { FooterSection } from "./footer/FooterSection.tsx";
+import { FooterLink } from "./FooterLink.tsx";
+import { FooterSection } from "./FooterSection.tsx";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();

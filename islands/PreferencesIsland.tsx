@@ -2,7 +2,7 @@
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 import { PreferenceSection } from "../components/preferences/PreferenceSection.tsx";
-import { ErrorAlert } from "../components/ErrorAlert.tsx";
+import { ErrorAlert } from "../components/ui/ErrorAlert.tsx";
 
 interface UserPreferences {
   dietary_restrictions: string[];

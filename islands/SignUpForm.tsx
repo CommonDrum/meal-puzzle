@@ -1,10 +1,10 @@
 // islands/SignUpForm.tsx
 import { useSignal } from "@preact/signals";
-import { FormHeader } from "../components/FormHeader.tsx";
-import { ErrorAlert } from "../components/ErrorAlert.tsx";
-import { FormField } from "../components/FormField.tsx";
-import { TermsCheckbox } from "../components/signup/TermsCheckbox.tsx";
-import { SubmitButton } from "../components/SubmitButton.tsx";
+import { FormHeader } from "../components/ui/FormHeader.tsx";
+import { ErrorAlert } from "../components/ui/ErrorAlert.tsx";
+import { FormField } from "../components/ui/FormField.tsx";
+import { TermsCheckbox } from "../components/auth/signup/TermsCheckbox.tsx";
+import { SubmitButton } from "../components/ui/SubmitButton.tsx";
 
 interface SignUpData {
   email: string;
