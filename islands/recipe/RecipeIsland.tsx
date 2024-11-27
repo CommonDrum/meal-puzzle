@@ -1,4 +1,9 @@
 import { type Recipe } from "./schema.ts";
+import { RecipeBadge } from "../../components/recipe/Badge.tsx";
+import { RecipeMetric } from "../../components/recipe/RecipeMetric.tsx";
+import { IngredientList } from "../../components/recipe/IngredientList.tsx";
+import { StepList } from "../../components/recipe/StepList.tsx";
+import { SectionHeader } from "../../components/ui/SectionHeader.tsx";
 
 interface RecipeDisplayProps {
   recipe: Recipe;
@@ -6,46 +11,60 @@ interface RecipeDisplayProps {
 
 export default function RecipeDisplay({ recipe }: RecipeDisplayProps) {
   return (
-    <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 class="text-3xl font-bold mb-2">{recipe.title}</h1>
-      
-      <div class="mb-4 text-gray-600">{recipe.description}</div>
-      
-      <div class="flex gap-4 mb-6 text-sm">
-        <div class="flex items-center">
-          <span class="font-semibold">Servings:</span>
-          <span class="ml-2">{recipe.servings}</span>
+    <div class="max-w-2xl mx-auto p-8">
+      {/* Header Section */}
+      <div class="space-y-6 mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">{recipe.title}</h1>
+        <p class="text-lg text-gray-600">{recipe.description}</p>
+        {/* Recipe Metrics */}
+        <div class="flex flex-wrap gap-6">
+          <RecipeMetric
+            icon="👥"
+            label="Servings"
+            value={recipe.servings}
+          />
+          <RecipeMetric
+            icon="⏱️"
+            label="Total Time"
+            value={`${recipe.totalMinutes} min`}
+          />
+          <RecipeMetric
+            icon="📊"
+            label="Difficulty"
+            value={recipe.difficulty}
+          />
         </div>
-        <div class="flex items-center">
-          <span class="font-semibold">Time:</span>
-          <span class="ml-2">{recipe.totalMinutes} minutes</span>
-        </div>
-        <div class="flex items-center">
-          <span class="font-semibold">Difficulty:</span>
-          <span class="ml-2 capitalize">{recipe.difficulty}</span>
+        {/* Quick Info Badges */}
+        <div class="flex flex-wrap gap-2">
+          <RecipeBadge
+            value={`${recipe.servings} servings`}
+            variant="outline"
+          />
+          <RecipeBadge
+            value={`${recipe.totalMinutes} minutes`}
+            variant="secondary"
+          />
+          <RecipeBadge
+            value={recipe.difficulty}
+            variant="default"
+          />
         </div>
       </div>
-      
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold mb-3">Ingredients</h2>
-        <ul class="list-disc pl-5 space-y-2">
-          {recipe.ingredients.map((ingredient, index) => (
-            <li key={index}>
-              {ingredient.quantity} {ingredient.unit} {ingredient.name}
-            </li>
-          ))}
-        </ul>
+      {/* Ingredients Section */}
+      <div class="mb-8">
+        <SectionHeader
+          title="Ingredients"
+          subtitle={`Everything you need to serve ${recipe.servings} people`}
+        />
+        <IngredientList ingredients={recipe.ingredients} />
       </div>
-      
+      {/* Instructions Section */}
       <div>
-        <h2 class="text-xl font-semibold mb-3">Instructions</h2>
-        <ol class="list-decimal pl-5 space-y-3">
-          {recipe.steps.map((step, index) => (
-            <li key={index} class="pl-2">
-              {step}
-            </li>
-          ))}
-        </ol>
+        <SectionHeader
+          title="Instructions"
+          subtitle="Follow these steps to prepare your dish"
+        />
+        <StepList steps={recipe.steps} />
       </div>
     </div>
   );
