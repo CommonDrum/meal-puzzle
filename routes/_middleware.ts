@@ -115,6 +115,10 @@ export async function handler(
     return response;
 
   } catch (error) {
+    // Get the pathname from the request URL for error handling
+    const url = new URL(req.url);
+    const pathname = url.pathname;
+
     // Handle errors based on route type
     if (error instanceof AuthError || error instanceof Error) {
       if (pathname.startsWith(ROUTES.api)) {

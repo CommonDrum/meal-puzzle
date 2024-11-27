@@ -20,11 +20,14 @@ import * as $index from "./routes/index.tsx";
 import * as $preference from "./routes/preference.tsx";
 import * as $signin from "./routes/signin.tsx";
 import * as $signup from "./routes/signup.tsx";
+import * as $test_recipe from "./routes/test-recipe.tsx";
 import * as $CardIsland from "./islands/CardIsland.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
 import * as $NavbarIsland from "./islands/NavbarIsland.tsx";
 import * as $PreferencesIsland from "./islands/PreferencesIsland.tsx";
 import * as $SignUpForm from "./islands/SignUpForm.tsx";
+import * as $recipe_RecipeIsland from "./islands/recipe/RecipeIsland.tsx";
+import * as $recipe_schema from "./islands/recipe/schema.ts";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -47,6 +50,7 @@ const manifest = {
     "./routes/preference.tsx": $preference,
     "./routes/signin.tsx": $signin,
     "./routes/signup.tsx": $signup,
+    "./routes/test-recipe.tsx": $test_recipe,
   },
   islands: {
     "./islands/CardIsland.tsx": $CardIsland,
@@ -54,6 +58,8 @@ const manifest = {
     "./islands/NavbarIsland.tsx": $NavbarIsland,
     "./islands/PreferencesIsland.tsx": $PreferencesIsland,
     "./islands/SignUpForm.tsx": $SignUpForm,
+    "./islands/recipe/RecipeIsland.tsx": $recipe_RecipeIsland,
+    "./islands/recipe/schema.ts": $recipe_schema,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
